@@ -1,8 +1,6 @@
 __MACOSX
 __pycache__
 **/build
-*.bin
-*.bmp
 .DS_Store
 *.iml
 *.jpg
