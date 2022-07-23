@@ -14,7 +14,9 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("using {} device.".format(device))
 
-    train_images_path, train_images_label, val_images_path, val_images_label = read_split_data(root)
+    train_info, val_info, num_classes = read_split_data(root)
+    train_images_path, train_images_label = train_info
+    val_images_path, val_images_label = val_info
 
     data_transform = {
         "train": transforms.Compose([transforms.RandomResizedCrop(224),

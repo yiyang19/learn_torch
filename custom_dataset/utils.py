@@ -10,10 +10,10 @@ def read_split_data(root: str, val_rate: float = 0.2):
     assert os.path.exists(root)
 
     # 遍历文件夹，注意数据集
-    flower_class = [cla for cla in os.listdir(root) if os.path.isdir(os.path.join(root, cla))]
-    flower_class.sort()
+    class_names = [cla for cla in os.listdir(root) if os.path.isdir(os.path.join(root, cla))]
+    class_names.sort()
 
-    class_indices = dict((k, v) for v, k in enumerate(flower_class))
+    class_indices = dict((k, v) for v, k in enumerate(class_names))
     json_str = json.dumps(dict((val, key) for key, val in class_indices.items()), indent=4)
     with open('class_indices.json', 'w') as json_file:
         json_file.write(json_str)
@@ -26,7 +26,7 @@ def read_split_data(root: str, val_rate: float = 0.2):
     supported = [".jpg", ".JPG", ".png", ".PNG"]  # 支持的文件后缀类型
 
     # 遍历每个文件夹下的文件
-    for cla in flower_class:
+    for cla in class_names:
         cla_path = os.path.join(root, cla)
         # 遍历获取supported支持的所有文件路径
         images = [os.path.join(root, cla, i) for i in os.listdir(cla_path)
@@ -53,9 +53,9 @@ def read_split_data(root: str, val_rate: float = 0.2):
     plot_image = False
     if plot_image:
         # 绘制每种类别个数柱状图
-        plt.bar(range(len(flower_class)), every_class_num, align='center')
+        plt.bar(range(len(class_names)), every_class_num, align='center')
         # 将横坐标0,1,2,3,4替换为相应的类别名称
-        plt.xticks(range(len(flower_class)), flower_class)
+        plt.xticks(range(len(class_names)), class_names)
         # 在柱状图上添加数值标签
         for i, v in enumerate(every_class_num):
             plt.text(x=i, y=v + 5, s=str(v), ha='center')
@@ -67,7 +67,7 @@ def read_split_data(root: str, val_rate: float = 0.2):
         plt.title('flower class distribution')
         plt.show()
 
-    return train_images_path, train_images_label, val_images_path, val_images_label
+    return [train_images_path, train_images_label], [val_images_path, val_images_label], len(class_names)
 
 
 def plot_data_loader_image(data_loader):
